@@ -1,0 +1,133 @@
+import React, { useContext, useState } from "react";
+import { AuthContext } from "../context/AuthProvider";
+import {TextField,Grid,Button,Card,CardContent,CardActions,CardMedia,Container,makeStyles, Typography} from '@material-ui/core';
+import {Link} from "react-router-dom";
+import NewzAge from  "../NewzAge.JPG";
+import a from  "../a.gif";
+
+const Login = (props) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message , setMessage] = useState("");
+  let {login} = useContext(AuthContext);
+
+  const handleLogin = async (e)=>{
+    //   email , password
+    try{
+        await login(email , password);//as login was a promisified function so we use await
+        props.history.push("/"); //navigate to /
+    }
+    catch(err){
+        setMessage(err.message);
+        setEmail("")
+        setPassword("");
+    }
+
+  }
+  let useStyles=makeStyles({
+     
+    centerDivs:{
+       height:"100vh",
+       display:"flex",
+       justifyContent:"center",
+       width:"100vw"
+
+    },
+    music:
+    {
+      backgroundSize:"contain",
+      height:"25rem" ,
+      
+      
+    },
+    fullWidth:{
+     
+      width:"100%"
+    },
+    centerElements:{
+      display:"flex",
+      flexDirection:"column",
+      
+    },
+    mb:{
+      marginBottom:"1rem",
+     
+    },
+    padding:{
+      paddingTop:"1rem",
+      paddingBottom:"1rem",
+    },
+    alignCenter:{
+      justifyContent:"center"
+    },
+    color:
+    {
+      // background:"#ff7f50",
+      height:"100vh",
+      backgroundImage: "url(" + "https://resize.indiatvnews.com/en/resize/newbucket/715_-/2019/11/whatsapp-image-2019-11-24-at-16-1574593427.jpeg" + ")",
+      backgroundPosition: 'center',
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat'
+    
+    },
+    cont:
+    {
+      display:"flex",
+      flexDirection:"column",
+      justifyContent:"center",
+      marginTop:"10vh",
+      marginLeft:"5vw",
+      
+  
+    },
+    cardlogo:
+    {
+      height:"9vh" ,
+      backgroundSize:"contain" ,
+      padding:"5px"
+    }
+
+  })
+let classes=useStyles();
+  return (
+    <div className={classes.color} >
+   
+      <Container >
+        <Grid container spacing={2} >
+             <Grid item sm={5} className={classes.cont}>
+                   {/* <Paper image={logo} className={classes.ab}></Paper> */}
+                   <CardMedia image={a} className={classes.music}></CardMedia>
+             </Grid>
+              <Grid  item sm={4} className={classes.cont}>
+                {/* login form */}
+                <Card variant="outlined" className={classes.mb}>
+                <CardMedia image={NewzAge} className={classes.cardlogo}></CardMedia>
+                <CardContent className={classes.centerElements}>
+                  <TextField  label="Email" type="email" variant="outlined" value={email} className={classes.mb} size="small"  onChange={(e) => setEmail(e.target.value)}></TextField>
+                  <TextField  label="Password" type="password" variant="outlined" value={password} size="small"   onChange={(e) => setPassword(e.target.value)}></TextField>
+                </CardContent>
+                <CardActions>
+                <Button variant="contained" color="primary" onClick={handleLogin} className={classes.fullWidth}>LOGIN</Button>
+                
+                </CardActions>
+                <Typography style={{ color: "red" ,textAlign:"center"}}>{message}</Typography>
+                
+                </Card>
+                <Card variant="outlined" className={classes.padding}>
+                   <Typography style={{textAlign:"center"}}>
+                     Don't have an account ? 
+                     <Button variant="contained" color="primary">
+                     <Link style={{color:"white"}}to="/signup">SignUp</Link>
+                     </Button>
+                     
+                   </Typography>
+                </Card>
+              </Grid>
+        </Grid>
+      </Container>
+
+    </div>
+  );
+};
+
+export default Login;
